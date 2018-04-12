@@ -5,23 +5,124 @@
     <script src="data_generator.js"></script>
   </head>
   <body>
+
     <script>
 
-      $(document).ready(function(){
-        var $body = $('body');
-        $body.html('');
+      $(document).ready(function() {
 
-        var index = streams.home.length - 1;
-        while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
-          index -= 1;
+        var $body = $('body');
+        newTweet();
+
+        function newTweet() {
+          // $('.userTweets').remove();
+          // $('.tweet').remove();
+          renderTweet(streams.home);
+        //   var index = streams.home.length - 1;
+        //   while(index >= 0) {
+        //   var tweet = streams.home[index];
+        //   var $tweet = $('<div class=\'tweets\'></div>');
+        //   var $tweetUser = $('<button class=\'user\'></button>')
+        //       .text('@' + tweet.user)
+        //       .appendTo($tweet);
+        //
+        //   var $tweetMessage = $('<span class=\'tweetsAndTime\'></span>')
+        //       .text(tweet.message + ' ' + tweet.created_at)
+        //       .appendTo($tweet);
+        //
+        //   $tweet.appendTo($body);
+        //   index -= 1;
+        // }
+      }
+
+      // this function takes a list of tweets and renders them
+      // in the 'tweet' div
+      // eg. [{user:"gshriver", message:"hell yeah", date:"now"}]
+      // adds to <div class="tweets">
+      //           <div class="tweet"> <span class="user">gshriver</span> <span> ....... </div>
+
+      function renderTweet(tweets) {
+        $('.tweet').remove();
+
+        let index = tweets.length - 1;
+        while(index >= 0) {
+          let tweet = tweets[index];
+          let $tweet = $('<div class=\'tweet\'></div>');
+          $(`<button data-user = "${tweet.user}" ></button>`)
+              .text('@' + tweet.user)
+              .appendTo($tweet)
+              .on('click', userTweet);
+
+          $('<span class=\'tweetsAndTime\'></span>')
+              .text(tweet.message + ' ' + tweet.created_at)
+              .appendTo($tweet);
+
+          $tweet.appendTo($('.tweets'));
+          // $button.on('click', userTweet);
+
+          index --;
         }
+      }
+
+      function userTweet() {
+        // $('.tweet').remove();
+        let $this = $(this);
+        let userName = $this.data('user');
+        renderTweet(streams.users[userName]);
+        // debugger;
+        // $body.html('');
+
+        // $('.tweets').remove();
+        // $('.userTweets').remove();
+        // var newIndex = streams.home.length - 1;
+        // while(newIndex >= 0) {
+        //   var userTweet = streams.home[newIndex];
+        //   var $userTweet = $('<div class=\'userTweets\'></div>');
+        //   if(userTweet.user === userName) {
+        //     $userTweet.text(userTweet.message + userTweet.created_at);
+        //     $userTweet.appendTo($body);
+        //   }
+        //   newIndex --;
+        // }
+      }
+
+
+      $('.newTweet').on('click', newTweet);
+
+      for(let keyUser in streams.users) {
+        let $button = $(`<button data-user = "${keyUser}" ></button>`);
+        $button.text(keyUser).appendTo($('.buttons'));
+        $button.on('click', userTweet);
+
+      }
+      // $('.doug').on('click', userTweet);
+      // $('.shawn').on('click', userTweet);
 
       });
 
+
+        // var $body = $('body');
+        // $body.html('');
+        //
+        // var index = streams.home.length - 1;
+        // while(index >= 0) {
+        //   var tweet = streams.home[index];
+        //   var $tweet = $('<div></div>');
+        //   $tweet.text('@' + tweet.user + ': ' + tweet.message);
+        //   $tweet.appendTo($body);
+        //   index -= 1;
+        // }
+
+
+      // });
+
     </script>
+    <div class="buttons">
+      <button class='newTweet'> New Tweets </button>
+      <!-- <button class='shawn' data-user='shawndrost'> shawndrost </button>
+      <button class='sharks'> sharksforcheap </button>
+      <button class='mracus'> mracus </button>
+      <button class='doug'> douglascalhoun </button> -->
+    </div>
+    <div class="tweets"> </div>
   </body>
 </html>
